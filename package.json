@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "cp node_modules/@safe-global node_modules/@safe-globalThis && tsc && vite build",
+    "build": "cp -r node_modules/@safe-global node_modules/@safe-globalThis && tsc && vite build",
     "preview": "vite preview",
     "clean": "rm -rf node_modules"
   },
