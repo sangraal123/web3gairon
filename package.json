@@ -1,0 +1,31 @@
+{
+  "name": "vite-wagmi",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "cp node_modules/@safe-global node_modules/@safe-globalThis && tsc && vite build",
+    "preview": "vite preview",
+    "clean": "rm -rf node_modules"
+  },
+  "dependencies": {
+    "@tokenbound/sdk": "*",
+    "buffer": "^6.0.3",
+    "@tanstack/react-query": "^5.17.19",
+    "@rainbow-me/rainbowkit": "2.0.0-beta.2",
+    "ethers": "^5.7.2",
+    "process": "^0.11.10",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "util": "^0.12.5",
+    "viem": "^2.10.5",
+    "wagmi": "^2.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.21",
+    "@types/react-dom": "^18.2.7",
+    "@vitejs/plugin-react": "^4.0.4",
+    "typescript": "^5.2.2",
+    "vite": "^4.4.9"
+  }
+}
