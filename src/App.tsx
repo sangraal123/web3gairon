@@ -276,8 +276,8 @@ const Alchemy_API = "IkLCDxEjkwe4tb30m9XNxMu-HRmpeee0";
   }
 
   return (
-    <>
-      <div style={{display: 'flex'}}>
+    <div style={{display: 'flex'}}>
+      {address && (<>
       <div style={{width: '50%'}}>
       <div className="title">
       <h1>Web3概論 簡単デモ</h1>
@@ -298,7 +298,7 @@ const Alchemy_API = "IkLCDxEjkwe4tb30m9XNxMu-HRmpeee0";
           cursor: 'pointer'
         }} accept=".jpg , .jpeg , .png" onChange={imageToNFT} />
       </Button>
-      {address && (
+      
         <div
           style={{
             display: 'flex',
@@ -322,7 +322,7 @@ const Alchemy_API = "IkLCDxEjkwe4tb30m9XNxMu-HRmpeee0";
         />
         <button onClick={() => createAccount()}>アカウントを生成する</button>
         </div>
-      )}
+
       </div>
       <div style={{width: '50%'}}>
         <h2>保有NFT(Sepolia Testnet)表示機能</h2>
@@ -335,8 +335,8 @@ const Alchemy_API = "IkLCDxEjkwe4tb30m9XNxMu-HRmpeee0";
                     }) : <div>No NFTs found</div>
                 }
           </section>
-  </div>
+      </div>
+      </>)}
     </div>
-  </>
   )
 }
