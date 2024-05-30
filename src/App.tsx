@@ -29,51 +29,60 @@ import Web3Mint from '../artifacts/contracts/Web3Mint.sol/Web3Mint.json';
 //   // Add other properties and methods you expect to use
 // }
 
-interface Contract {
+interface NFTContract {
   address: string;
 }
 
-interface TokenMetadata {
-  tokenType: string;
-}
-
-interface TokenId {
+interface NFTId {
   tokenId: string;
-  tokenMetadata: TokenMetadata;
+  tokenMetadata: {
+    tokenType: string;
+  };
 }
 
-interface TokenUri {
-  raw: string;
+interface NFTTokenUri {
   gateway: string;
-}
-
-interface Media {
   raw: string;
+}
+
+interface NFTMedia {
   gateway: string;
+  raw: string;
 }
 
-interface Attribute {
-  value: string;
-  trait_type: string;
-}
-
-interface Metadata {
+interface NFTMetadata {
   name: string;
   description: string;
   image: string;
-  external_url: string;
-  attributes: Attribute[];
 }
 
-interface OwnedNft {
-  contract: Contract;
-  id: TokenId;
+interface NFTContractMetadata {
+  name: string;
+  symbol: string;
+  tokenType: string;
+  contractDeployer: string;
+  deployedBlockNumber: number;
+  openSea: object;
+}
+
+interface NFT {
+  contract: NFTContract;
+  id: NFTId;
+  balance: string;
   title: string;
   description: string;
-  tokenUri: TokenUri;
-  media: Media[];
-  metadata: Metadata;
+  tokenUri: NFTTokenUri;
+  media: NFTMedia[];
+  metadata: NFTMetadata;
   timeLastUpdated: string;
+  contractMetadata: NFTContractMetadata;
+}
+
+interface OwnedNFTsResponse {
+  ownedNfts: NFT[];
+  pageKey: string;
+  totalCount: number;
+  blockHash: string;
 }
 
 import NftCard from './components/nftcard';
@@ -117,7 +126,7 @@ export function App() {
 
   const [tokenContractInput, setTokenContractInput] = useState('0x0000000000000000000000000000000000000000')
   const [tokenIdInput, setTokenIdInput] = useState('0')
-  const [NFTs, setNFTs] = useState<OwnedNft[] | null>(null);
+  const [NFTs, setNFTs] = useState<NFT[] | null>(null);
 
   useEffect(() => {
     async function testTokenboundClass() {
@@ -152,7 +161,7 @@ export function App() {
 
     testTokenboundClass()
     fetchNFTs()
-  }, [tokenContractInput, tokenIdInput, NFTs])
+  }, [tokenContractInput, tokenIdInput])
 
   const createAccount = useCallback(async () => {
     if (!tokenboundClient || !address) return
@@ -258,32 +267,31 @@ const Alchemy_API = "IkLCDxEjkwe4tb30m9XNxMu-HRmpeee0";
         return;
     }
     if (account) {
-        let data;
         try {
-            data = await fetch(`${endpoint}/getNFTs?owner=${account}`).then(data => data.json());
+            const data = await fetch(`${endpoint}/getNFTs?owner=${account}`).then(data => data.json()) as OwnedNFTsResponse;
+            console.log(data.ownedNfts[0].contractMetadata.deployedBlockNumber);
+            setNFTs(data.ownedNfts.sort((a, b) => {
+              if (b.contractMetadata.deployedBlockNumber !== a.contractMetadata.deployedBlockNumber) 
+              {  return b.contractMetadata.deployedBlockNumber - a.contractMetadata.deployedBlockNumber; }
+              else
+              {  return Number(b.id.tokenId) - Number(a.id.tokenId); }
+            })
+            );
         } catch (e) {
             fetchNFTs(retryAttempt+1);
         }
-
-        setNFTs(data.ownedNfts.sort((a :any, b :any) => {
-          const timeA = new Date(a.timeLastUpdated).getTime(); 
-          const timeB = new Date(b.timeLastUpdated).getTime(); 
-          return timeB - timeA;
-        })
-        );
-        return data;
     }
   }
 
   return (
-    <div style={{display: 'flex'}}>
-      {address && (<>
-      <div style={{width: '50%'}}>
+    <>
       <div className="title">
       <h1>Web3概論 簡単デモ</h1>
       <ConnectButton />
       {isConnected && <Account />}
       </div>
+      {address && (<div style={{display: 'flex'}}>
+      <div style={{width: '50%'}}>
       <h2>NFTアップローダー</h2>
       <p>画像を選択すると、ERC-721のNFTをミントできます。</p>
       <Button variant="contained">
@@ -320,7 +328,7 @@ const Alchemy_API = "IkLCDxEjkwe4tb30m9XNxMu-HRmpeee0";
             value={tokenIdInput}
             onChange={(e) => setTokenIdInput(e.target.value)}
         />
-        <button onClick={() => createAccount()}>アカウントを生成する</button>
+        <Button variant="contained" onClick={() => createAccount()}>アカウントを生成する</Button>
         </div>
 
       </div>
@@ -330,13 +338,13 @@ const Alchemy_API = "IkLCDxEjkwe4tb30m9XNxMu-HRmpeee0";
                 {
                     NFTs ? NFTs.slice(0,3).map(NFT => {
                         return (
-                           <NftCard image={NFT.media[0].gateway} id={NFT.id.tokenId } title={NFT.title} address={NFT.contract.address} description={NFT.description} attributes={NFT.metadata.attributes} ></NftCard>
+                           <NftCard image={NFT.media[0].gateway} id={NFT.id.tokenId } title={NFT.title} address={NFT.contract.address} description={NFT.description}></NftCard>
                         )
                     }) : <div>No NFTs found</div>
                 }
           </section>
       </div>
-      </>)}
-    </div>
+      </div>)}
+    </>
   )
 }

@@ -1,20 +1,14 @@
 import './nftcard.css'
 
-interface Attribute {
-    trait_type: string;
-    value: string;
-}
-
 interface NftCardProps {
     image: string;
     id: string;
     title: string;
     address: string;
     description?: string;
-    attributes?: Attribute[];
 }
 
-const NftCard = ({ image, id, title, address, description, attributes }: NftCardProps) => {
+const NftCard = ({ image, id, title, address, description }: NftCardProps) => {
     const idDecimal = parseInt(id, 16);
     return (
         <div className="nft-card">
@@ -31,14 +25,6 @@ const NftCard = ({ image, id, title, address, description, attributes }: NftCard
                 <div className="nft-description">
                     <p>Description: {description ? description.slice(0, 200) : "No Description"}</p>
                 </div>
-            </div>
-            <div className="nft-attributes">
-                {attributes && attributes.length > 0 && attributes.map((attribute, index) => (
-                    <div className="nft-attribute" key={index}>
-                        <p className="attribute-type">{attribute.trait_type}:</p>
-                        <p className="attribute-value">{attribute.value}</p>
-                    </div>
-                ))}
             </div>
         </div>
     );

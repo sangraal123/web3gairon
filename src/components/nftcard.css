@@ -30,28 +30,3 @@
 .nft-description {
     margin-bottom: 0.75rem; /* Equivalent to mb-3 */
 }
-
-.nft-attributes {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* Equivalent to justify-center */
-    align-items: center; /* Equivalent to items-center */
-    padding: 0.75rem; /* Equivalent to p-3 */
-}
-
-.nft-attribute {
-    width: 50%; /* Equivalent to w-1/2 */
-    margin-bottom: 0.5rem; /* Equivalent to mb-2 */
-    display: flex;
-    justify-content: flex-start; /* Equivalent to justify-start */
-    flex-direction: column;
-}
-
-.attribute-type {
-    margin-right: 0.5rem; /* Equivalent to mr-2 */
-    font-weight: bold; /* Equivalent to font-bold */
-}
-
-.attribute-value {
-    font-size: 0.875rem; /* Equivalent to text-sm */
-}
