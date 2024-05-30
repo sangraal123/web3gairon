@@ -171,7 +171,7 @@ export function App() {
       setCurrentNFTs(await fetchNFTs(0));
     }
     wrapperFetchNFTs();
-  }, []);
+  }, [isConnected]);
 
   const createAccount = useCallback(async () => {
     if (!tokenboundClient || !address) return;
