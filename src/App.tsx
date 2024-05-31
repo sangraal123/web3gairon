@@ -239,7 +239,7 @@ export function App() {
 
     const name = "sample" as string;
     const [account] = await walletClient.getAddresses();
-    const contractAddress = "0x1255A9Fa337aE9E990Cb12B1fEa9a3D4EfC6bB73";
+    const contractAddress = "0xeBF9cBa35EE6eDdaBe75CdC90A4a5FD91b733C45";
 
     const { result } = await publicClient.simulateContract({
       address: contractAddress,
